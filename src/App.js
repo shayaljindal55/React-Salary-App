@@ -7,17 +7,21 @@ class App extends Component {
       salaryTypeName: '',
       fixedSalary: '',
       incentive: '',
-      minOrders: ''
+      minOrders: '',
+      employeeInfo: [],
+      employeeName: '',
+      employeeOrdersDone: '',
+      employeeSalaryType: ''
     }
   }
   submitForm(e) {
     e.preventDefault()
-    const { salaryTypeName, fixedSalary, includes, minOrders, salaryInfo } = this.state
+    const { salaryTypeName, fixedSalary, incentive, minOrders, salaryInfo } = this.state
     // creating object
     const salaryInfoObj = {
       salaryTypeName,
       fixedSalary,
-      includes,
+      incentive,
       minOrders
     }
 
@@ -27,14 +31,49 @@ class App extends Component {
       salaryInfo
     })
     console.log(salaryInfo);
+    e.target.reset()
 
   }
 
   textChange(e) {
     this.setState({
-      [e.target.name]: e.target.name
+      [e.target.name]: e.target.value
     })
   }
+
+  renderTable() {
+    const salaryInfo = this.state.salaryInfo;
+    const data = salaryInfo.map((d, i) => {
+      return (
+        <tr key={i}>
+          <td>{i + 1}
+          </td>
+          <td>{d.salaryTypeName}
+          </td>
+          <td>{d.fixedSalary}
+          </td>
+          <td>{d.incentive}
+          </td>
+          <td>{d.minOrders}
+          </td>
+        </tr>
+      )
+    })
+    return data;
+  }
+
+  renderSalaryType() {
+    const salaryInfo = this.state.salaryInfo;
+    const data = salaryInfo.map((d, i) => {
+      return (
+        <option key={i}>
+          {d.salaryTypeName}
+        </option>
+      )
+    })
+    return data;
+  }
+
   render() {
     return (
       <div className="container">
@@ -60,6 +99,52 @@ class App extends Component {
                 Change={this.textChange.bind(this)}></MyInput>
               <button type="submit" className="btn btn-primary">Submit</button>
             </form>
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>S.No</th>
+                  <th>Salary Type Name</th>
+                  <th>Fixed Salary</th>
+                  <th>Incentive</th>
+                  <th>Min Orders</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.renderTable()}
+              </tbody>
+            </table>
+          </div>
+          <div className="col-sm-6">
+            <form onSubmit={this.submitForm.bind(this)}>
+              <h2>Employee Info</h2>
+              <MyInput name="employeeName"
+                value={this.state.employeeName}
+                title="Employee Name"
+                Change={this.textChange.bind(this)}></MyInput>
+              <MyInput name="employeeOrdersDone"
+                value={this.state.employeeOrdersDone}
+                title="Employee Orders Done"
+                Change={this.textChange.bind(this)}></MyInput>
+              <div className="form-group">
+                <select className="form-control " value={this.state.employeeSalaryType}
+                  onChange={this.textChange.bind(this)}>
+                  {this.renderSalaryType()}</select></div>
+              <button type="submit" className="btn btn-primary">Submit</button>
+            </form>
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>S.No</th>
+                  <th>Salary Type Name</th>
+                  <th>Fixed Salary</th>
+                  <th>Incentive</th>
+                  <th>Min Orders</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.renderTable()}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
